@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- 动态标题：初始 -->
+    <title>正在分配主人中……</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a1a; }
+        
+        #loading {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 999; display: flex; align-items: center; justify-content: center;
+            flex-direction: column; background: #1a1a1a; transition: opacity 0.8s ease;
+        }
+        
+        /* 艺术文字样式 - 高冷御姐风格 */
+        .top-text {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 300;
+            font-family: 'Georgia', 'SimSun', serif; /* 优雅的衬线字体 */
+            letter-spacing: 8px;
+            margin-bottom: 40px;
+            margin-top: -80px; /* 往上移动更多 */
+            
+            /* 冷色调渐变文字 */
+            background: linear-gradient(135deg, #a8d8ff 0%, #c8a2ff 50%, #a8d8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            
+            /* 发光效果 */
+            filter: drop-shadow(0 0 20px rgba(168, 162, 255, 0.6))
+                    drop-shadow(0 0 40px rgba(100, 150, 255, 0.3));
+            
+            /* 呼吸动画 */
+            animation: breathe 3s ease-in-out infinite;
+        }
+        
+        /* 呼吸动画 */
+        @keyframes breathe {
+            0%, 100% {
+                opacity: 0.85;
+                filter: drop-shadow(0 0 20px rgba(168, 162, 255, 0.6))
+                        drop-shadow(0 0 40px rgba(100, 150, 255, 0.3));
+            }
+            50% {
+                opacity: 1;
+                filter: drop-shadow(0 0 30px rgba(168, 162, 255, 0.8))
+                        drop-shadow(0 0 50px rgba(100, 150, 255, 0.5));
+            }
+        }
+
+        .character {
+            position: relative; width: 300px; height: 400px;
+            animation: bounce 0.6s infinite alternate ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-12px); }
+        }
+        
+        .character img {
+            width: 100%; height: 100%; object-fit: contain; border-radius: 12px;
+            filter: drop-shadow(0 0 15px rgba(100, 150, 255, 0.3));
+        }
+        
+        .progress-container {
+            position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%);
+            width: 60%; max-width: 280px; height: 6px; background: #333;
+            border-radius: 3px; overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #4a90e2 0%, #a855f7 100%);
+            border-radius: 3px; transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 13px; color: #888; font-weight: 300; letter-spacing: 2px;
+        }
+        
+        iframe {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            border: none; opacity: 0; transition: opacity 0.8s ease; z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <!-- 艺术文字 -->
+        <div class="top-text">正在寻找离你最近的主人....</div>
+        
+        <div class="character">
+            <img src="https://wmimg.com/i/1523/2026/03/69c996d104cc3.gif" alt="Loading">
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">LOADING 0%</div>
+    </div>
+
+    <iframe id="myFrame" src="https://d.6611.fun/group.php/index/share/id/159/t/0c2531a50125a87efe8d76e50512ca4b/time/1774816385.html"></iframe>
+
+    <script>
+        const loading = document.getElementById('loading');
+        const iframe = document.getElementById('myFrame');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        let done = false;
+        let progress = 0;
+
+        function simulateProgress() {
+            if (progress >= 100) return;
+            const increment = progress < 50 ? 5 : progress < 80 ? 3 : 1;
+            progress = Math.min(progress + increment, 100);
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `LOADING ${progress}%`;
+            if (progress < 100) {
+                setTimeout(simulateProgress, 100);
+            }
+        }
+        simulateProgress();
+
+        function show() {
+            if (done) return;
+            done = true;
+            progress = 100;
+            progressBar.style.width = '100%';
+            progressText.textContent = 'COMPLETE';
+            
+            // 动态标题：加载完成
+            document.title = "主人分配完成..";
+
+            setTimeout(() => {
+                loading.style.opacity = 0;
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    iframe.style.opacity = 1;
+                }, 300);
+            }, 500);
+        }
+
+        iframe.onload = show;
+        iframe.onerror = show;
+        setTimeout(show, 1500);
+    </script>
+</body>
+</html>
